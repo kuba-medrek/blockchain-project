@@ -1,0 +1,18 @@
+<div class="ui fixed inverted menu">
+	<div class="ui container">
+		<a href="/" class="header item">
+			<img class="logo" src="/static/img/ether.png">
+			Blockchain Lottery
+		</a>
+		{{!-- <a href="#" class="item">Home</a> --}}
+		<div class="ui simple dropdown item">
+	  		Games
+			<i class="dropdown icon"></i>
+	  		<div class="menu">
+				{{#each games}}
+				<a class="item" href="/game/{{simpleName}}">{{name}}</a>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</div>
