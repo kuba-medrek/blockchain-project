@@ -3,23 +3,18 @@ pragma solidity >=0.4.21 <0.6.0;
 contract Storage {
 	address public owner;
 
-	modifier onlyOwner() {
-        require (msg.sender == owner);
-        _;
-    }
-
 	constructor() public {
         owner = msg.sender;
 	}
 
-	function withdraw(uint amount) onlyOwner public returns(bool) {
+	function withdraw(uint amount) public {
+		require (msg.sender == owner);
         require(amount <= getBalance());
-        address(uint160(owner)).transfer(amount);
-        return true;
+        msg.sender.transfer(amount);
     }
 
-    function getBalance() public returns(uint) {
-    	return address(this).balance;
+	function getBalance() public view returns(uint256) {
+		return address(this).balance;
 	}
 
 	function() payable external {

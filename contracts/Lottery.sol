@@ -24,7 +24,7 @@ contract Lottery {
         gamesPlayed = 0;
 	}
 
-	function getNumberOfPlayers() public returns(uint256) {
+	function getNumberOfPlayers() public view returns(uint256) {
 		return players.length;
 	}
 
@@ -48,11 +48,11 @@ contract Lottery {
 
 	function chooseWinner() public {
 		state = LotteryStatus.Closed;
-		uint winner_number = random(players.length);
-		address payable winner = make_payable(players[winner_number]);
-		winners.push(players[winner_number]);
+		uint winnerNumber = random(players.length);
+		address payable winner = makePayable(players[winnerNumber]);
+		winners.push(players[winnerNumber]);
 		winner.transfer(getBalance() * 7/10);
-		make_payable(ethStorage).transfer(getBalance());
+		makePayable(ethStorage).transfer(getBalance());
 		restartLottery();
 	}
 
@@ -63,7 +63,7 @@ contract Lottery {
 		state = LotteryStatus.Open;
 	}
 
-	function destroy_contract(address payable recipient) public {
+	function destroyContract(address payable recipient) public {
 		require(msg.sender == owner);
 		selfdestruct(recipient);
 	}
@@ -72,7 +72,7 @@ contract Lottery {
 		return uint(keccak256(abi.encodePacked(now, block.difficulty, players))) % scope;
  	}
 
- 	function make_payable(address x) internal pure returns (address payable) {
+ 	function makePayable(address x) internal pure returns (address payable) {
       return address(uint160(x));
   	}
 }
