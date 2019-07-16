@@ -2,20 +2,26 @@ pragma solidity >=0.4.21 <0.6.0;
 
 // 1 ether = 1000000000000000000 wei
 
+import "./Storage.sol";
+
 contract Lottery {
+	address private ethStorage;
 	address[] public players;
 	address public owner;
 	uint public tickets;
-	uint public ticket_price;
+	uint public ticketPrice;
+	uint public gamesPlayed;
 	address[] public winners;
 	enum LotteryStatus {Open, Closed}
 	LotteryStatus state;
 
-    constructor() public {
+    constructor(address secondContract) public {
+    	ethStorage = secondContract;
         owner = msg.sender;
         tickets = 15;
         state = LotteryStatus.Open;
-        ticket_price = 1 ether;
+        ticketPrice = 1 ether;
+        gamesPlayed = 0;
 	}
 
 	function getNumberOfPlayers() public returns(uint256) {
@@ -45,13 +51,15 @@ contract Lottery {
 		uint winner_number = random(players.length);
 		address payable winner = make_payable(players[winner_number]);
 		winners.push(players[winner_number]);
-		winner.transfer(getBalance());
+		winner.transfer(getBalance() * 7/10);
+		make_payable(ethStorage).transfer(getBalance());
 		restartLottery();
 	}
 
 	function restartLottery() internal {
 		players.length = 0;
 		tickets = 15;
+		gamesPlayed += 1;
 		state = LotteryStatus.Open;
 	}
 
