@@ -4,7 +4,6 @@
 			<img class="logo" src="/static/img/ether.png">
 			Blockchain Lottery
 		</a>
-		{{!-- <a href="#" class="item">Home</a> --}}
 		<div class="ui simple dropdown item">
 	  		Games
 			<i class="dropdown icon"></i>
@@ -14,5 +13,16 @@
 				{{/each}}
 			</div>
 		</div>
+		{{#if account}}
+    	<h1>{{author.firstName}} {{author.lastName}}</h1>
+		<div class="ui simple dropdown item">
+	  		Logged as: {{account.name}}
+			<i class="dropdown icon"></i>
+	  		<div class="menu">
+				<span class="item">Balance: {{account.balance}} <i class="fab fa-ethereum"></i></span>
+				<a class="item" href="/logout">Logout</a>
+			</div>
+		</div>
+		{{/if}}
 	</div>
 </div>

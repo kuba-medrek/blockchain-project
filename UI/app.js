@@ -34,13 +34,16 @@ app.use(new Router().post('/api/login', async ctx => {
 	};
 }).routes());
 app.use(unauthorised.routes());
-// app.use(async (ctx, next) => { // Working
-// 	const token = ctx.cookies.get('bp_token');
-// 	if(!token || !users.findOne({'token': token})) {
-// 		ctx.throw(401);
-// 	}
-// 	await next();
-// });
+app.use(async (ctx, next) => { // Working
+	const token = ctx.cookies.get('bp_token');
+	if(!token || !users.findOne({'token': token})) {
+		ctx.throw(401);
+	}
+	ctx.state.account = {
+		address: users.findOne({token: token}).login
+	};
+	await next();
+});
 app.use(authorised.routes());
 
 const server = app.listen(PORT, () => {

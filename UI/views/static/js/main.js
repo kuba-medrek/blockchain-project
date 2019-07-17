@@ -20,8 +20,7 @@ async function login() {
 	.catch(err => window.alert('Bad password'));
 
 	if(result) {
-		localStorage.bp_token = result.token;
-		// window.cookies
+		window.location = '/';
 	}
 }
 

@@ -7,18 +7,26 @@ const authorised = new Router();
 
 unauthorised.get('/', async ctx => {
 	await ctx.render('home', {
-		games: games.map(fillDetails)
+		games: games.map(fillGameDetails),
+		account: ctx.state.account ? await fillAccountDetails(ctx.state.account) : undefined
 	});
 });
 
 unauthorised.get('/login', async ctx => {
 	await ctx.render('login', {
-		games: games.map(fillDetails)
+		games: games.map(fillGameDetails)
+	});
+});
+
+authorised.get('/logout', async ctx => {
+	ctx.cookies.set('bp_token');
+	await ctx.render('home', {
+		games: games.map(fillGameDetails)
 	});
 });
 
 authorised.get('/game/:name', async ctx => {
-	const game = games.map(fillDetails).filter(game => game.simpleName === ctx.params.name)[0];
+	const game = games.map(fillGameDetails).filter(game => game.simpleName === ctx.params.name)[0];
 	const stats = {
 		counter: 0
 	};
@@ -26,18 +34,27 @@ authorised.get('/game/:name', async ctx => {
 	if(!game) {
 		ctx.throw(400, 'No such game');
 		await ctx.render('error', {
-			games: games.map(fillDetails)
+			games: games.map(fillGameDetails),
+			account: await fillAccountDetails(ctx.state.account)
 		});
 	}
 	
 	await ctx.render('game', {
 		game: game,
 		stats: stats,
-		games: games.map(fillDetails)
+		games: games.map(fillGameDetails),
+		account: await fillAccountDetails(ctx.state.account)
 	});
 });
 
-const fillDetails = game => {
+const fillAccountDetails = async account => {
+	return {
+		name: account.address,
+		balance: await controller.balance(account.address)
+	};
+};
+
+const fillGameDetails = game => {
 	const soldTickets = 1;
 	const address = 'xxx';
 	return {
