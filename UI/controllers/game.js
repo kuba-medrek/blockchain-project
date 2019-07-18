@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const Web3 = require ('web3');
+const jsonfile = require('jsonfile');
 
-const web3 = new Web3('ws://127.0.0.1:8545');
+const truffleConf = require('../../truffle-config');
+const web3 = new Web3(`ws://${truffleConf.host}:${truffleConf.port}`);
 
 module.exports = {
 	loginUser: async (login, password, db, ctx) => {
@@ -40,5 +42,42 @@ module.exports = {
 	balance: async address => {
 		const wei = await web3.eth.getBalance(address);
 		return web3.utils.fromWei(wei);
+	},
+
+	buyTokens: async (who, gameId, amount) => {
+		// console.log('BUYING: ', who, gameId, amount);
+
+		const trx = {
+			from: who,
+			to: await getAddress(gameId),
+			value: web3.utils.toWei(amount.toString())
+		};
+
+		const contract = new web3.eth.Contract(
+			(await jsonfile.readFile(`${__dirname}/../../build/contracts/Lottery.json`)).abi,
+			await getAddress(gameId)
+		);
+		
+		return contract.methods.play(amount).send(trx);
+	},
+
+	gameDetails: async(gameId) => { //gameId not used
+		const contract = new web3.eth.Contract(
+			(await jsonfile.readFile(`${__dirname}/../../build/contracts/Lottery.json`)).abi,
+			await getAddress(gameId)
+		);
+		
+		return {
+			balance: web3.utils.fromWei((await contract.methods.getBalance().call()).toString()),
+			counter: undefined, //await contract.gamesPlayed.call(),
+			players: await contract.methods.getNumberOfPlayers().call()
+		};
 	}
+};
+
+const getAddress = async () => {
+	const file = `${__dirname}/../../build/contracts/Lottery.json`;
+	const addr = (await jsonfile.readFile(file)).networks.truffleConf.network_id.address;
+	
+	return addr;
 };
