@@ -1,0 +1,30 @@
+<div class="ui fixed inverted menu">
+	<div class="ui container">
+		<a href="/" class="header item">
+			<img class="logo" src="/static/img/ether.png">
+			Blockchain Lottery
+		</a>
+		<div class="ui simple dropdown item">
+	  		Games
+			<i class="dropdown icon"></i>
+	  		<div class="menu">
+				{{#each games}}
+				<a class="item" href="/game/{{simpleName}}">{{name}}</a>
+				{{/each}}
+			</div>
+		</div>
+		{{#if account}}
+    	<h1>{{author.firstName}} {{author.lastName}}</h1>
+		<div class="ui simple dropdown item">
+	  		Logged as: {{account.name}}
+			<i class="dropdown icon"></i>
+	  		<div class="menu">
+				<span class="item">Balance: {{account.balance}} <i class="fab fa-ethereum"></i></span>
+				<a class="item" href="/logout">Logout</a>
+			</div>
+		</div>
+		{{else}}
+		<a class="item" href="/login">Login</a>
+		{{/if}}
+	</div>
+</div>

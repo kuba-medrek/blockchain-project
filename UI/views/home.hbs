@@ -1,0 +1,56 @@
+<style>
+	#content {
+		margin-top: 100px;
+		margin-bottom: 25px;
+	}
+	.bigicon-container {
+		text-align: center;
+	}
+	.bigicon-container > i {
+		font-size: 130px;
+		height: 200px;
+		line-height: 200px;
+	}
+	.bigicon-container > i::before {
+		text-align: center;
+	}
+</style>
+<div class="ui main text relaxed container" id="content">
+	<div class="ui placeholder segment">
+		<div class="ui icon header">
+			<i class="fas fa-money-check"></i>
+			<i class="fas fa-hand-holding-usd"></i>
+			<i class="fas fa-money-bill"></i>
+			Buy tikets, win prices.
+		</div><br/>
+		Every lottery starts when all tokens are sold.
+		80% of wallet is transfered to winner, 20% are maintenance costs.<br/>
+		{{#each games}}
+  		<div class="ui card">
+  			<div class="image bigicon-container">
+    			<i class="{{icon}}"></i>
+  			</div>
+  			<div class="content">
+    			<a class="header">{{name}}</a>
+	    		<div class="meta">
+    	  			<ul>
+						<li>{{totalValue}} <i class="fab fa-ethereum"></i> in wallet when game starts.</li>
+						<li>1 <i class="fas fa-money-bill-alt"></i> = 1 <i class="fab fa-ethereum"></i></li>
+					</ul>
+    			</div>
+  			</div>
+  			<div class="extra content">
+    			<a>
+      				<i class="fas fa-money-bill-alt"></i>
+      				{{soldTickets}} / {{totalTickets}} tokens sold.
+    			</a>
+  			</div>
+  			<div class="ui bottom attached red progress">
+    			<div class="bar" style="width:{{percentageSold}}%">
+					 <div class="progress"></div>
+				</div>
+  			</div>
+		</div>
+  		{{/each}}
+	</div>
+</div>
