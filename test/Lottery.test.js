@@ -25,20 +25,20 @@ beforeEach(async () => {
   	data: storageContractBytecode
   });
   
-  // const deployedLottery = lotteryContractInstance.deploy({
-  //   data: lotteryContractBytecode,
-  //   arguments: deployedStorage.address
-  // });
-
-
-  // Use the first account to deploy
-  //lottery = await deployedLottery.send({ from: manager, gas: '5000000' })
+    // Use the first account to deploy
   stor = await deployedStorage.send({ from: manager, gas: '5000000' })
+  const storAddress = await stor.methods.owner().call();
+
+  const deployedLottery = lotteryContractInstance.deploy({
+     data: lotteryContractBytecode,
+     arguments: [storAddress]
+  });
+  
+  lottery = await deployedLottery.send(storAddress, { from: manager, gas: '5000000' })
 });
 
 describe('Auction', () => {  
-	it('test', async () => {
-	    //const auctionManager = await lottery.methods.manager().call();
-	    assert.equal(2, 1, "test");
-	});  //Continue from this line from now on...
-});
+	it('Ownership test', async () => {
+		const owner = await lottery.methods.owner().call()
+	    assert.equal(manager, owner, "The manager is the one who   launches the smart contract.");
+	});
