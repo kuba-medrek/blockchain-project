@@ -33,12 +33,28 @@ beforeEach(async () => {
      data: lotteryContractBytecode,
      arguments: [storAddress]
   });
-  
+
   lottery = await deployedLottery.send(storAddress, { from: manager, gas: '5000000' })
 });
 
-describe('Auction', () => {  
+describe('Lottery', () => {  
 	it('Ownership test', async () => {
-		const owner = await lottery.methods.owner().call()
-	    assert.equal(manager, owner, "The manager is the one who   launches the smart contract.");
+		const owner = await lottery.methods.owner().call();
+	    assert.equal(manager, owner, "The manager is the one who launches the smart contract.");
 	});
+	it('Selling tickets', async () => {
+		const ticketsToBuy = 2;
+		const startingNumberOfTickets = await lottery.methods.tickets().call();
+		await lottery.methods.play(ticketsToBuy).send({from: accounts[1], value: web3.utils.toWei(ticketsToBuy.toString(), 'ether'), gas:100000});
+		const numberOfTicketsAfterPurchase = await lottery.methods.tickets().call();
+		assert.equal(numberOfTicketsAfterPurchase, startingNumberOfTickets - ticketsToBuy, "Contract did not decrease number of available tickets.");
+		
+	});
+	it('Add player to playerList', async () => {
+		const buyer = accounts[2];
+		await lottery.methods.play(2).send({from: accounts[2], value: web3.utils.toWei('2', 'ether'), gas:100000});
+		const playerList = await lottery.methods.getPlayers().call();
+		assert.equal(playerList[0], buyer, "Player was not added to players list.")
+	});
+
+});
