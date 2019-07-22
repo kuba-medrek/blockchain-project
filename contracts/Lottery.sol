@@ -28,6 +28,10 @@ contract Lottery {
         return players;
     }
 
+	function getWinners() public view returns(address[] memory) {
+        return winners;
+    }
+
 	function getNumberOfPlayers() public view returns(uint256) {
 		return players.length;
 	}
