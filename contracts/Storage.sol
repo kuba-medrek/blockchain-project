@@ -7,7 +7,7 @@ contract Storage {
         owner = msg.sender;
 	}
 
-	function withdraw(uint amount) public {
+	function withdrawEth(uint amount) public payable {
 		require (msg.sender == owner);
         require(amount <= getBalance());
         msg.sender.transfer(amount);
@@ -17,7 +17,9 @@ contract Storage {
 		return address(this).balance;
 	}
 
+	function getPaid() public payable {
+	}
+
 	function() payable external {
-	
 	}
 }

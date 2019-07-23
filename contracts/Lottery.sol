@@ -24,8 +24,20 @@ contract Lottery {
         gamesPlayed = 0;
 	}
 
+	function getPlayers() public view returns(address[] memory) {
+        return players;
+    }
+
+	function getWinners() public view returns(address[] memory) {
+        return winners;
+    }
+
 	function getNumberOfPlayers() public view returns(uint256) {
 		return players.length;
+	}
+
+	function getNumberOfTickets() public view returns(uint256) {
+		return tickets;
 	}
 
 	function getBalance() public view returns(uint256) {
