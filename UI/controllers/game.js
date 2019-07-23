@@ -77,7 +77,9 @@ module.exports = {
 
 const getAddress = async () => {
 	const file = `${__dirname}/../../build/contracts/Lottery.json`;
-	const addr = (await jsonfile.readFile(file)).networks.truffleConf.network_id.address;
+	const networkId = truffleConf.networks.development.network_id;
+
+	const addr = (await jsonfile.readFile(file)).networks[networkId].address;
 	
 	return addr;
 };
