@@ -3,7 +3,7 @@ const Web3 = require ('web3');
 const jsonfile = require('jsonfile');
 
 const truffleConf = require('../../truffle-config');
-const web3 = new Web3(`ws://${truffleConf.host}:${truffleConf.port}`);
+const web3 = new Web3(`ws://${truffleConf.networks.development.host}:${truffleConf.networks.development.port}`);
 
 module.exports = {
 	loginUser: async (login, password, db, ctx) => {
@@ -50,7 +50,8 @@ module.exports = {
 		const trx = {
 			from: who,
 			to: await getAddress(gameId),
-			value: web3.utils.toWei(amount.toString())
+			value: web3.utils.toWei(amount.toString()),
+			gasLimit: '1000000'
 		};
 
 		const contract = new web3.eth.Contract(
