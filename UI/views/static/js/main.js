@@ -47,8 +47,23 @@ async function buyToken() {
 	// console.log(result);
 }
 
+function preventOvermax() {
+	const button = document.getElementById('buy-token');
+	const input = document.getElementById('tokens-count');
+	const max = parseInt(input.max);
+
+	if(parseInt(input.value) > max) {
+		console.log('disabling');
+		button.className = button.className.replace(/active/, 'disabled');
+	} else {
+		console.log('enabling');
+		button.className = button.className.replace(/disabled/, 'active');
+	}
+}
+
 if(location.toString().indexOf('/game/') > -1) {
 	document.getElementById('buy-token').addEventListener('click', buyToken);
+	document.getElementById('tokens-count').addEventListener('change', preventOvermax);
 } else if(location.toString().indexOf('/login') > -1) {
 	document.getElementById('login-button').addEventListener('click', login);
 }

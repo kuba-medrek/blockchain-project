@@ -69,7 +69,8 @@ const fillGameDetails = async game => {
 			soldTickets: balance / game.ticketPrice,
 			percentageSold: (balance / game.ticketPrice) / game.totalTickets,
 			counter: counter,
-			players: players
+			players: players,
+			availableTickets: (game.totalTickets - balance / game.ticketPrice)
 		}
 	};
 };

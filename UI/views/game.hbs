@@ -15,12 +15,12 @@
 	</ul>
 	<h2>Buy tokens</h2>
 	<div class="ui left labeled input">
-  		<input type="number" placeholder="1" id="tokens-count">
+  		<input type="number" placeholder="1" id="tokens-count" max={{game.availableTickets}}>
   		<a class="ui tag label">
     		How many tokens
   		</a>
 	</div>
-	<button class="ui primary button" id="buy-token">Buy tokens</button>
-	<h2 class="ui header">Previous winners</h2>
-		//TODO: 
+	<button class="ui disabled primary button" id="buy-token">Buy tokens</button>
+	{{!-- <h2 class="ui header">Previous winners</h2> --}}
+		{{!-- //TODO:  --}}
 </div>
